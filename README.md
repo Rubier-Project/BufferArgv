@@ -73,6 +73,10 @@ buffer = BufferAttribute(dict_a)
 print(buffer.name) # OutPut: Jack
 ```
 
+# Notice
+
++ if you want to set a message for `-h` or `--help` on `on_call` mode, please set that of finally decorator
+
 ## Basicly Things
 + Created by `python 3.11.0`
 + Module Git `https://github.com/Rubier-Project/BufferArgv`
