@@ -14,7 +14,6 @@ from Buffer.BufferArgv import BufferConsole
 import sys
 import json
 
-commands: dict = {}
 stringCommands: dict = {}
 
 class BufferAttribute(object):
@@ -112,10 +111,6 @@ class BufferConsole(object):
             "boolean",
             "true-false"
         ]
-
-    def __setcommands__(self, __key, __value):
-        commands[__key] = __value
-        return commands
     
     def getDictArgv(self):
         return BufferList(sys.argv).parse()
@@ -187,6 +182,22 @@ class BufferConsole(object):
                                 else:setattr(self.last_things, cleared_key, argv[ifo_key])
                         else:
                             setattr(self.last_things, cleared_key, "Null")
+
+            elif mode == "on_call":
+                for flag in flags:
+
+                    setattr(self.last_things, flag.replace("-", ""), False)
+
+                    if flag in arg_val:
+                        arg_index = arg_val.index(flag)
+                        k = argv[str(arg_index+1)]
+                        cleared_key = k.replace("-", "")
+
+                        if k in arg_val:
+                            setattr(self.last_things, cleared_key, True)
+
+                        else:
+                            setattr(self.last_things, cleared_key, False)
 
             func(self.last_things)
 
