@@ -140,8 +140,6 @@ class BufferConsole(object):
         opts = self.last_things.options
         argvs = sys.argv
 
-        print(opts)
-
         for argv in argvs:
             if argv.startswith("-"):
                 argv = argv.replace("-", "")
