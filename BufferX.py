@@ -83,7 +83,6 @@ class Things(object):
 
 class BufferConsole(object):
     def __init__(self):
-        self.data = []
         self.last_things = Things()
         self.handlers = []
         self.buffer_list = BufferList
@@ -202,45 +201,122 @@ class BufferConsole(object):
             func(self.last_things)
 
 class BufferString(object):
-    def __init__(self,
-                 listed_data = [],
-                 __help: str = "",
-                 __discription: str = ""
-                 ):
-
-        self.listed_data = listed_data
-        self.forHelp = __help
-        self.dis = __discription
-        self.status_help = True
-        self.status_dis = True
-        self.pyVersion = "3"
-        self.data = []
-    
-    def __setcommands__(self, __key, __value):
-        stringCommands[__key] = __value
-        return stringCommands
+    def __init__(self, string: str):
+        assert isinstance(string, str), exit("The Self@BufferString did not get a string value")
+        self.string = string.split()
+        self.last_things = Things()
+        self.handlers = []
+        self.buffer_list = BufferList
+        self.modes = [
+            'in_front_of',
+            'on_call'
+        ]
+        self.string_abs = [
+            "str",
+            "string",
+            "strings"
+        ]
+        self.int_abs = [
+            "int",
+            "integer",
+            "number"
+        ]
+        self.dict_abs = [
+            "dict",
+            "dictionary",
+            "json"
+        ]
+        self.bool_abs = [
+            "bool",
+            "boolean",
+            "true-false"
+        ]
     
     def getDictArgv(self):
-        return BufferList(self.listed_data).parse()
+        return BufferList(self.string).parse()
     
-    def addFlag(self, *flags, mode: str = "in_front_of"):
-        flg = list(flags)
-        for i in range(len(flg)):
-            self.__setcommands__(str(i+1), flg[i])
+    def isArray(self, array: str):
+        try:
+            return {"is_array": True, "array": json.loads(array)}
+        except:return {"is_array": False}
 
-        if mode == "in_front_of":
-            for key, val in BufferString(self.listed_data).getDictArgv().items():
+    def isBoolean(self, boolean: str):
+        try:
+            if boolean.startswith("t"):
+                return {"is_boolean": True, "boolean": bool("T"+boolean[1:])}
+            elif boolean.startswith("f"):
+                return {"is_boolean": True, "boolean": bool("F"+boolean[1:])}
+            else:return {"is_boolean": True, "boolean": bool(boolean)}
+        except:return {"is_boolean": False}
+    
+    def addFlag(self, *flags, mode: str = "in_front_of", obj_type: str = "str"):
+        def decorator(func):
+            self.handlers.append({func: {"flags": list(set(flags)), "mode": mode, "type": obj_type.lower()}})
+            return func
+        return decorator
 
-                if str(val) in flg:
-                    keyx = int(str(key).replace("_", ""))
-                    keyx += 1
-                    if not f"_{keyx}" in BufferString(self.listed_data).getDictArgv().keys():
-                        self.data.append("Null")
-                        pass
-                    else:
-                        self.data.append(BufferString(self.listed_data).getDictArgv()[f"_{keyx}"])
-                        pass
-                
-                else:
-                    pass
-            return self.data
+    def trust(self):
+        for handler in self.handlers:
+            func = list(handler.keys())[0]
+            flags = handler[func]['flags']
+            mode = handler[func]['mode']
+            type = handler[func]['type']
+
+            argv = self.buffer_list(self.string).parse()
+            arg_key = list(argv.keys())
+            arg_val = list(argv.values())
+
+            if mode == "in_front_of":
+
+                for flag in flags:
+
+                    setattr(self.last_things, flag.replace("-", ""), "NONECALL")
+
+                    if flag in arg_val:
+                        arg_index = arg_val.index(flag)
+                        ifo_key = str(arg_index+2)
+                        cleared_key = argv[str(arg_index+1)].replace("-", "")
+
+                        if ifo_key in arg_key:
+
+                            if type in self.string_abs:
+                                setattr(self.last_things, cleared_key, argv[ifo_key])
+                                
+                            elif type in self.int_abs:
+                                if argv[ifo_key].isdigit():
+                                    setattr(self.last_things, cleared_key, int(argv[ifo_key]))
+                                else:setattr(self.last_things, cleared_key, argv[ifo_key])
+
+                            elif type in self.dict_abs:
+                                status = self.isArray(argv[ifo_key])
+
+                                if status['is_array']:
+                                    setattr(self.last_things, cleared_key, status['array'])
+                                else:setattr(self.last_things, cleared_key, argv[ifo_key])
+                                
+                            elif type in self.bool_abs:
+                                status = self.isBoolean(argv[ifo_key])
+
+                                if status['is_boolean']:
+                                    setattr(self.last_things, cleared_key, status['boolean'])
+                                else:setattr(self.last_things, cleared_key, argv[ifo_key])
+                        else:
+                            setattr(self.last_things, cleared_key, "Null")
+
+            elif mode == "on_call":
+                for flag in flags:
+
+                    setattr(self.last_things, flag.replace("-", ""), False)
+
+                    if flag in arg_val:
+                        arg_index = arg_val.index(flag)
+                        k = argv[str(arg_index+1)]
+                        cleared_key = k.replace("-", "")
+
+                        if k in arg_val:
+                            setattr(self.last_things, cleared_key, True)
+
+                        else:
+                            setattr(self.last_things, cleared_key, False)
+
+            func(self.last_things)
