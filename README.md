@@ -30,3 +30,9 @@ def onCall(obj: Things):
 
 buffer.trust()
 ```
+
++ The `mode` parameter is `in_front_of` by default
+
+## Basicly Things
++ Created by `python 3.11.0`
++ Module Git `https://github.com/Rubier-Project/BufferArgv`
