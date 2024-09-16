@@ -131,6 +131,24 @@ class BufferConsole(object):
             self.handlers.append({func: {"flags": list(set(flags)), "mode": mode, "type": obj_type.lower()}})
             return func
         return decorator
+    
+    def setFilter(self):
+        """
+        Check The all arguments and detect the mistakes
+        """
+
+        opts = self.last_things.options
+        argvs = sys.argv
+
+        print(opts)
+
+        for argv in argvs:
+            if argv.startswith("-"):
+                argv = argv.replace("-", "")
+                if not argv in opts:
+                    return {"detected": True, "invalid_arg": argv}
+                
+        return {"detected": False}
 
     def trust(self):
         for handler in self.handlers:
@@ -252,6 +270,24 @@ class BufferString(object):
             self.handlers.append({func: {"flags": list(set(flags)), "mode": mode, "type": obj_type.lower()}})
             return func
         return decorator
+    
+    def setFilter(self):
+        """
+        Check The all arguments and detect the mistakes
+        """
+
+        opts = self.last_things.options
+        argvs = self.string
+
+        print(opts)
+
+        for argv in argvs:
+            if argv.startswith("-"):
+                argv = argv.replace("-", "")
+                if not argv in opts:
+                    return {"detected": True, "invalid_arg": argv}
+                
+        return {"detected": False}
 
     def trust(self):
         for handler in self.handlers:
