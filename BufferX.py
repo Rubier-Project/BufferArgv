@@ -14,8 +14,6 @@ from Buffer.BufferArgv import BufferConsole
 import sys
 import json
 
-stringCommands: dict = {}
-
 class BufferAttribute(object):
     def __init__(self, dic):
         self.dic = dic
