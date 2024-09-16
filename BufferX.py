@@ -183,7 +183,7 @@ class BufferConsole(object):
             elif mode == "on_call":
                 for flag in flags:
 
-                    setattr(self.last_things, flag.replace("-", ""), False)
+                    setattr(self.last_things, flag.replace("-", ""), "NONECALL")
 
                     if flag in arg_val:
                         arg_index = arg_val.index(flag)
@@ -304,7 +304,7 @@ class BufferString(object):
             elif mode == "on_call":
                 for flag in flags:
 
-                    setattr(self.last_things, flag.replace("-", ""), False)
+                    setattr(self.last_things, flag.replace("-", ""), "NONECALL")
 
                     if flag in arg_val:
                         arg_index = arg_val.index(flag)
