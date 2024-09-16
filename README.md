@@ -63,6 +63,32 @@ class Things(object):
         return opts
 ```
 
+## Check Arguments Automaticly
+
+if you enter `python file.py -s` and the source of `file.py` is
+
+```python
+@buffer.addFlag("-h", "--help", mode="on_call")
+def onHelp(obj: BufferArgv.Things):
+    if obj.h == True or obj.help == True:
+        print("Usage: python3 test.py -u <URL LINK>")
+    if obj.h == False and obj.help == False:
+        if hasattr(obj, "u"):
+            if getattr(obj, "u") == "NONECALL" and getattr(obj, "s") == "NONECALL": ##################################################
+                print("Use -h or --help flag to see usage")
+        else:
+            print("Use -h or --help flag to see usage")
+
+
+buffer.trust()
+
+filter = buffer.setFilter()
+
+print(filter) # OutPut: {"detected": True, "invalid_argv": "-s"}
+```
+
+the out put must be `{"detected": True, "invalid_argv": "-s"}`
+
 ## How to add Keys and Values from Dictionary convert them to the attributes of a class?
 
 its Simple, you should use `BufferAttribute` Object
@@ -79,6 +105,7 @@ print(buffer.name) # OutPut: Jack
 # Notice
 
 + if you want to set a message for `-h` or `--help` on `on_call` mode, please set that as finally decorator
++ if you want to set filter for args, set that into next of help decorator
 
 ## Basicly Things
 + Created by `python 3.11.0`
