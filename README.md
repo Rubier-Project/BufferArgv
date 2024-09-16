@@ -74,7 +74,7 @@ def onHelp(obj: BufferArgv.Things):
         print("Usage: python3 test.py -u <URL LINK>")
     if obj.h == False and obj.help == False:
         if hasattr(obj, "u"):
-            if getattr(obj, "u") == "NONECALL" and getattr(obj, "s") == "NONECALL": ##################################################
+            if getattr(obj, "u") == "NONECALL" and getattr(obj, "s") == "NONECALL":
                 print("Use -h or --help flag to see usage")
         else:
             print("Use -h or --help flag to see usage")
