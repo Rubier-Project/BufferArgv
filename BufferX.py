@@ -92,6 +92,26 @@ class BufferConsole(object):
             'in_front_of',
             'on_call'
         ]
+        self.string_abs = [
+            "str",
+            "string",
+            "strings"
+        ]
+        self.int_abs = [
+            "int",
+            "integer",
+            "number"
+        ]
+        self.dict_abs = [
+            "dict",
+            "dictionary",
+            "json"
+        ]
+        self.bool_abs = [
+            "bool",
+            "boolean",
+            "true-false"
+        ]
 
     def __setcommands__(self, __key, __value):
         commands[__key] = __value
@@ -100,9 +120,23 @@ class BufferConsole(object):
     def getDictArgv(self):
         return BufferList(sys.argv).parse()
     
+    def isArray(self, array: str):
+        try:
+            return {"is_array": True, "array": json.loads(array)}
+        except:return {"is_array": False}
+
+    def isBoolean(self, boolean: str):
+        try:
+            if boolean.startswith("t"):
+                return {"is_boolean": True, "boolean": bool("T"+boolean[1:])}
+            elif boolean.startswith("f"):
+                return {"is_boolean": True, "boolean": bool("F"+boolean[1:])}
+            else:return {"is_boolean": True, "boolean": bool(boolean)}
+        except:return {"is_boolean": False}
+    
     def addFlag(self, *flags, mode: str = "in_front_of", obj_type: str = "str"):
         def decorator(func):
-            self.handlers.append({func: {"flags": list(set(flags)), "mode": mode, "type": obj_type}})
+            self.handlers.append({func: {"flags": list(set(flags)), "mode": mode, "type": obj_type.lower()}})
             return func
         return decorator
 
@@ -119,23 +153,39 @@ class BufferConsole(object):
 
             if mode == "in_front_of":
 
-                results = []
-
                 for flag in flags:
 
-                    setattr(self.last_things, flag.replace("-", ""), [])
+                    setattr(self.last_things, flag.replace("-", ""), "NONECALL")
 
                     if flag in arg_val:
                         arg_index = arg_val.index(flag)
                         ifo_key = str(arg_index+2)
                         cleared_key = argv[str(arg_index+1)].replace("-", "")
-                        attrs = getattr(self.last_things, cleared_key)
 
                         if ifo_key in arg_key:
-                            attrs.append(argv[ifo_key])
-                            setattr(self.last_things, cleared_key, argv[ifo_key])
+
+                            if type in self.string_abs:
+                                setattr(self.last_things, cleared_key, argv[ifo_key])
+                                
+                            elif type in self.int_abs:
+                                if argv[ifo_key].isdigit():
+                                    setattr(self.last_things, cleared_key, int(argv[ifo_key]))
+                                else:setattr(self.last_things, cleared_key, argv[ifo_key])
+
+                            elif type in self.dict_abs:
+                                status = self.isArray(argv[ifo_key])
+
+                                if status['is_array']:
+                                    setattr(self.last_things, cleared_key, status['array'])
+                                else:setattr(self.last_things, cleared_key, argv[ifo_key])
+                                
+                            elif type in self.bool_abs:
+                                status = self.isBoolean(argv[ifo_key])
+
+                                if status['is_boolean']:
+                                    setattr(self.last_things, cleared_key, status['boolean'])
+                                else:setattr(self.last_things, cleared_key, argv[ifo_key])
                         else:
-                            attrs.append("Null")
                             setattr(self.last_things, cleared_key, "Null")
 
             func(self.last_things)
