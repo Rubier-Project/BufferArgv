@@ -57,6 +57,9 @@ class Things(object):
             if item.startswith("__") and item in self.def_attrs:pass
             else:opts.append(item)
 
+        opts.remove("def_attrs")
+        opts.remove("options")
+        
         return opts
 ```
 
