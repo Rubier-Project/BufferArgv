@@ -84,6 +84,6 @@ print(buffer.name) # OutPut: Jack
 + Created by `python 3.11.0`
 + Module Git `https://github.com/Rubier-Project/BufferArgv`
 
-```powershell
+```bash
 python3 file.py
 ```
