@@ -101,7 +101,7 @@ print(buffer.name) # OutPut: Jack
 # Notice
 
 + if you want to set a message for `-h` or `--help` on `on_call` mode, please set that as finally decorator
-+ if you want to set filter for args, set that before calling `trust` function
++ if you want to set filter for args, set that before calling `trust` function ( its suggested to use this by that way, after all its optional )
 
 ## Basicly Things
 + Created by `python 3.11.0`
