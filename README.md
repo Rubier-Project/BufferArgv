@@ -79,15 +79,17 @@ def onHelp(obj: BufferArgv.Things):
         else:
             print("Use -h or --help flag to see usage")
 
-
+buffer.setFilter(['-h', '--help'], "Invalid Argument: B@ARGV")
 buffer.trust()
-
-filter = buffer.setFilter()
-
-print(filter) # OutPut: {"detected": True, "invalid_argv": "-s"}
 ```
 
-the out put must be `{"detected": True, "invalid_argv": "-s"}`
+The Parameters are: `flags_list`, `err_message`, `_exit`
+
++ Use `B@ARGV` keyword in `err_message` to see invalid argument. 
+
+- **flags_list** (list): The flags used in the script.
+- **err_message** (str): Message printed if an invalid argument is detected.
+- **_exit** (bool): If True, the program will terminate upon detecting an invalid argument.
 
 ## How to add Keys and Values from Dictionary convert them to the attributes of a class?
 
