@@ -71,13 +71,7 @@ class Things(object):
 @buffer.addFlag("-h", "--help", mode="on_call")
 def onHelp(obj: BufferArgv.Things):
     if obj.h == True or obj.help == True:
-        print("Usage: python3 test.py -u <URL LINK>")
-    if obj.h == False and obj.help == False:
-        if hasattr(obj, "u"):
-            if getattr(obj, "u") == "NONECALL" and getattr(obj, "s") == "NONECALL":
-                print("Use -h or --help flag to see usage")
-        else:
-            print("Use -h or --help flag to see usage")
+        print("Usage: python3", buffer.getDictArgv()['1'], "-r <FILE PATH>")
 
 buffer.setFilter(['-h', '--help'], "Invalid Argument: B@ARGV")
 buffer.trust()
