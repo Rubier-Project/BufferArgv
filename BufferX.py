@@ -132,21 +132,34 @@ class BufferConsole(object):
             return func
         return decorator
     
-    def setFilter(self):
+    def setFilter(self, flags_list: list, err_message: str, _exit: bool = True):
         """
-        Check The all arguments and detect the mistakes
+        Check The all arguments and detect the mistakes\n
+
+        Use 'B@ARGV' key word in your err_message to see invalid argument:\n
+
+        buffer.setFilter(\n
+            flags_list=[ '-h', '--help' ],\n
+            err_message="Invalid Key: B@ARGV",
+            _exit=True
+            )
+
+        Parameters:
+            - **flags_list** (list): The flags used in the script.
+            - **err_message** (str): Message printed if an invalid argument is detected.
+            - **_exit** (bool): If True, the program will terminate upon detecting an invalid argument.
         """
 
-        opts = self.last_things.options
+        flags = list(set(flags_list))
         argvs = sys.argv
 
         for argv in argvs:
             if argv.startswith("-"):
-                argv = argv.replace("-", "")
-                if not argv in opts:
-                    return {"detected": True, "invalid_arg": argv}
-                
-        return {"detected": False}
+                if not argv in flags:
+                    print(err_message.replace("B@ARGV", argv))
+
+                    if _exit:
+                        exit(1)
 
     def trust(self):
         for handler in self.handlers:
