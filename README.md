@@ -106,7 +106,3 @@ print(buffer.name) # OutPut: Jack
 ## Basicly Things
 + Created by `python 3.11.0`
 + Module Git `https://github.com/Rubier-Project/BufferArgv`
-
-```bash
-python3 file.py
-```
