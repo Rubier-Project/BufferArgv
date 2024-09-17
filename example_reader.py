@@ -2,7 +2,7 @@ import BufferArgv
 import os
 
 buffer = BufferArgv.BufferConsole()
-
+import argparse
 def isHumanReadable(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -31,4 +31,5 @@ def onHelp(obj: BufferArgv.Things):
     if obj.h == True or obj.help == True:
         print("Usage: python3", buffer.getDictArgv()['1'], "-r <FILE PATH>")
 
+buffer.setFilter(["-h", "--help", "-r"], "error: B@ARGV")
 buffer.trust()
