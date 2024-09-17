@@ -67,8 +67,6 @@ class Things(object):
 
 ## Check Arguments Automaticly
 
-if you enter `python file.py -s` and the source of `file.py` is
-
 ```python
 @buffer.addFlag("-h", "--help", mode="on_call")
 def onHelp(obj: BufferArgv.Things):
