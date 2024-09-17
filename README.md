@@ -1,6 +1,8 @@
 # BufferArgv
 Simple Library to handle the arguments in ( terminal - strings )
 
+Objects: `BufferConsole`, `BufferString`, `BufferAttribute`
+
 ## Console Documention
 ```python
 buffer = BufferConsole()
