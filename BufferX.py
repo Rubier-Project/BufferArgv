@@ -89,7 +89,8 @@ class BufferConsole(object):
         self.buffer_list = BufferList
         self.modes = [
             'in_front_of',
-            'on_call'
+            'on_call',
+            'equals_with'
         ]
         self.string_abs = [
             "str",
@@ -228,6 +229,39 @@ class BufferConsole(object):
                         else:
                             setattr(self.last_things, cleared_key, False)
 
+            elif mode == "equals_with":
+                for flag in flags:
+                    setattr(self.last_things, flag.replace("-", ""), "NONECALL")
+                    for arg in sys.argv:
+                        if arg.startswith(flag):
+                            if "=" in arg:
+                                splitted_data = arg.split("=")[-1]
+
+                                if type in self.string_abs:
+                                    setattr(self.last_things, flag.replace("-", ""), splitted_data)
+
+                                elif type in self.int_abs:
+                                    if splitted_data.isdigit():
+                                        setattr(self.last_things, flag.replace("-", ""), int(splitted_data))
+                                    else:
+                                        setattr(self.last_things, flag.replace("-", ""), splitted_data)
+
+                                elif type in self.dict_abs:
+                                    status = self.isArray(splitted_data)
+                                    
+                                    if status['is_array']:
+                                        setattr(self.last_things, flag.replace("-", ""), status['array'])
+                                    else:setattr(self.last_things, flag.replace("-", ""), splitted_data)
+                                
+                                elif type in self.bool_abs:
+                                    status = self.isBoolean(splitted_data)
+
+                                    if status['is_boolean']:
+                                        setattr(self.last_things, flag.replace("-", ""), status['boolean'])
+                                    else:setattr(self.last_things, flag.replace("-", ""), splitted_data)
+                                else:setattr(self.last_things, flag.replace("-", ""), splitted_data)
+                            else:setattr(self.last_things, flag.replace("-", ""), "NONEEQUALS")
+                        
             func(self.last_things)
 
 class BufferString(object):
@@ -378,4 +412,37 @@ class BufferString(object):
                         else:
                             setattr(self.last_things, cleared_key, False)
 
+            elif mode == "equals_with":
+                for flag in flags:
+                    setattr(self.last_things, flag.replace("-", ""), "NONECALL")
+                    for arg in self.string:
+                        if arg.startswith(flag):
+                            if "=" in arg:
+                                splitted_data = arg.split("=")[-1]
+
+                                if type in self.string_abs:
+                                    setattr(self.last_things, flag.replace("-", ""), splitted_data)
+
+                                elif type in self.int_abs:
+                                    if splitted_data.isdigit():
+                                        setattr(self.last_things, flag.replace("-", ""), int(splitted_data))
+                                    else:
+                                        setattr(self.last_things, flag.replace("-", ""), splitted_data)
+
+                                elif type in self.dict_abs:
+                                    status = self.isArray(splitted_data)
+                                    
+                                    if status['is_array']:
+                                        setattr(self.last_things, flag.replace("-", ""), status['array'])
+                                    else:setattr(self.last_things, flag.replace("-", ""), splitted_data)
+                                
+                                elif type in self.bool_abs:
+                                    status = self.isBoolean(splitted_data)
+
+                                    if status['is_boolean']:
+                                        setattr(self.last_things, flag.replace("-", ""), status['boolean'])
+                                    else:setattr(self.last_things, flag.replace("-", ""), splitted_data)
+                                else:setattr(self.last_things, flag.replace("-", ""), splitted_data)
+                            else:setattr(self.last_things, flag.replace("-", ""), "NONEEQUALS")
+                        
             func(self.last_things)
