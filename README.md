@@ -107,7 +107,7 @@ print(buffer.name) # OutPut: Jack
 + Available modes: [ '`in_front_of`', '`on_call`', '`equals_with`' ]
 
 ### in front of
-```
+```python
 import BufferArgv
 
 buffer = BufferArgv.BufferString("python3 python_script.py --number 43")
@@ -120,7 +120,7 @@ buffer.trust()
 ```
 
 ### on call
-```
+```python
 import BufferArgv
 
 buffer = BufferArgv.BufferString("python3 python_script.py --number")
@@ -133,7 +133,7 @@ buffer.trust()
 ```
 
 ### equals with
-```
+```python
 import BufferArgv
 
 buffer = BufferArgv.BufferString("python3 python_script.py --number=43")
