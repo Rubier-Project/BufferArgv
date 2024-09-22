@@ -103,6 +103,49 @@ print(buffer.name) # OutPut: Jack
 + if you want to set a message for `-h` or `--help` on `on_call` mode, please set that as finally decorator
 + if you want to set filter for args, set that before calling `trust` function ( its suggested to use this by that way, after all its optional )
 
+# Modes & Examples
++ Available modes: [ '`in_front_of`', '`on_call`', '`equals_with`' ]
+
+### in front of
+```
+import BufferArgv
+
+buffer = BufferArgv.BufferString("python3 python_script.py --number 43")
+
+@buffer.addFlag("--number", mode="in_front_of", obj_type='integer')
+def onNumber(obj):
+    print(obj.number) # OutPut: 43
+
+buffer.trust()
+```
+
+### on call
+```
+import BufferArgv
+
+buffer = BufferArgv.BufferString("python3 python_script.py --number")
+
+@buffer.addFlag("--number", mode="on_call")
+def onNumber(obj):
+    print(obj.number) # OutPut: True
+
+buffer.trust()
+```
+
+### equals with
+```
+import BufferArgv
+
+buffer = BufferArgv.BufferString("python3 python_script.py --number=43")
+
+@buffer.addFlag("-n", "--number", mode="equals_with", obj_type='integer')
+def onNumber(obj):
+    print(obj.number) # OutPut: 43
+
+buffer.trust()
+```
+
++ This Modes are also available in `BufferConsole` Class.
 ## Basicly Things
 + Created by `python 3.11.0`
 + Module Git `https://github.com/Rubier-Project/BufferArgv`
